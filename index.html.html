@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html class="dark" dir="rtl" lang="he"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;800;900&amp;family=Sora:wght@400;600;700;800&amp;family=Heebo:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'surface-variant-hex': '#353534',
+                        'primary-blue': '#0070f3',
+                        'accent-blue': '#aec6ff'
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: max(884px, 100dvh);
+        }
+        .glass-card {
+            background: rgba(53, 53, 52, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .cyber-gradient {
+            background: linear-gradient(135deg, #aec6ff 0%, #0070f3 100%);
+        }
+        .glow-accent {
+            box-shadow: 0 0 40px rgba(0, 112, 243, 0.1);
+        }
+        .modal-glass {
+            background: rgba(53, 53, 52, 0.4);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 112, 243, 0.1);
+        }
+        .step-connector {
+            background: #0070F3;
+            box-shadow: 0 0 15px rgba(0, 112, 243, 0.5);
+        }
+        [dir="rtl"] .material-symbols-outlined.mirror {
+            transform: scaleX(-1);
+        }
+        .font-hebrew {
+            font-family: 'Heebo', sans-serif;
+        }
+    </style>
+</head>
+<body class="selection:bg-primary-container/30">
+<!-- Lead Capture Modal -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300" id="leadModal">
+<div class="modal-glass w-full max-w-md rounded-[2.5rem] p-8 relative animate-in fade-in zoom-in duration-300 border-0" dir="rtl">
+<button class="absolute top-6 left-6 text-white/50 hover:text-white transition-colors" onclick="toggleModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="text-center mb-8 font-hebrew">
+<h3 class="text-3xl font-black mb-2 text-white">קבלו ביקורת AI בחינם</h3>
+<p class="text-white/60">השאירו פרטים ונחזור אליכם עם אבחון מדויק</p>
+</div>
+<form class="space-y-4 font-hebrew text-right" id="leadForm">
+<div>
+<label class="block text-sm font-bold mb-2 mr-1 text-white/80">שם מלא</label>
+<input class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white/20 focus:ring-2 focus:ring-primary-blue/50 focus:border-transparent outline-none transition-all" name="name" placeholder="השם שלך" required="" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-bold mb-2 mr-1 text-white/80">מספר טלפון / וואטסאפ</label>
+<input class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-white/20 focus:ring-2 focus:ring-primary-blue/50 focus:border-transparent outline-none transition-all" name="phone" placeholder="050-0000000" required="" type="tel"/>
+</div>
+<div>
+<label class="block text-sm font-bold mb-2 mr-1 text-white/80">איזה סוכן הכי מעניין אותך?</label>
+<div class="relative">
+<select class="w-full bg-white/10 border border-white/10 rounded-2xl px-5 py-4 text-white focus:ring-2 focus:ring-primary-blue/50 focus:border-transparent outline-none transition-all appearance-none cursor-pointer" name="agent_type">
+<option class="bg-[#1a1a1a] text-white" value="speed-to-lead">Speed-to-Lead</option>
+<option class="bg-[#1a1a1a] text-white" value="ai-setter">AI Setter</option>
+<option class="bg-[#1a1a1a] text-white" value="database-goldmine">Database Goldmine</option>
+</select>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-white/50">expand_more</span>
+</div>
+</div>
+<button class="w-full cyber-gradient text-[#131313] text-xl font-black py-5 rounded-2xl mt-4 hover:shadow-[0_0_30px_rgba(0,112,243,0.4)] transition-all transform active:scale-[0.98]" type="submit">
+                שלחו לי ביקורת AI בחינם
+            </button>
+</form>
+</div>
+</div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#353534]/60 backdrop-blur-xl shadow-[0_0_40px_rgba(0,112,243,0.05)]">
+<nav class="flex flex-row-reverse justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#0070F3] text-3xl" data-icon="memory">memory</span>
+<span class="text-2xl font-bold bg-gradient-to-r from-[#aec6ff] to-[#0070F3] bg-clip-text text-transparent font-['Space_Grotesk'] tracking-tighter">AgentRun</span>
+</div>
+<div class="hidden md:flex flex-row-reverse gap-8 items-center">
+<a class="text-[#0070F3] font-bold hover:bg-white/10 transition-all px-3 py-1 rounded-lg" href="#hero">דף הבית</a>
+<a class="text-white/70 hover:text-[#0070F3] transition-all" href="#solutions">פתרונות</a>
+<a class="text-white/70 hover:text-[#0070F3] transition-all" href="#testimonials">הוכחות</a>
+<a class="text-white/70 hover:text-[#0070F3] transition-all" href="#faq">שאלות נפוצות</a>
+</div>
+<button class="bg-[#0070F3] text-white font-bold px-6 py-2 rounded-xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-blue-500/20 cyber-gradient" innerhtml="קבע פגישה כעת" onclick="toggleModal()">קבע פגישה כעת</button>
+</nav>
+</header>
+<main class="mt-20">
+<!-- Hero Section -->
+<section class="relative min-h-[795px] flex items-center justify-center overflow-hidden px-6 py-24" id="hero">
+<div class="absolute inset-0 z-0">
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-400/5 blur-[100px] rounded-full"></div>
+<img alt="abstract neural network mesh" class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUyUR7enp40ebUinsdOI3D12GRYr4KitF94dZAUG__F7OZjFNIqzJcbNhVFeCJPN6Q0-XOUCLCbX0EgeOd8hkCDwYiWdf4gM6-15xt-hhFZZGCSXVpQ4madPH59T09GDNzFDcIqnCzmke5m0vqDD7LnJNeY6rFW62W1SeqB60fQ0CHh80qQ0NNB27hVuePY8dsFHLHhikICvub9lfgGasmPCkYj6WdsNUf5foLw2E91Wpr8JsurA3F3jOwlZPj6Pv-mgqttHjO7Hdh"/>
+</div>
+<div class="relative z-10 max-w-5xl mx-auto text-center space-y-8">
+<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-4">
+<span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+<span class="text-xs font-bold tracking-widest text-blue-300 uppercase">חדש: אוטומציות מבוססות ביצועים בלבד</span>
+</div>
+<h1 class="text-5xl md:text-7xl lg:text-8xl font-black font-headline tracking-tighter leading-[1.1] text-white">
+                הוסף <span class="bg-gradient-to-r from-[#aec6ff] to-[#0070f3] bg-clip-text text-transparent">+15 פגישות</span> בחודש על בסיס ביצועים
+            </h1>
+<p class="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto font-light leading-relaxed">
+                אנחנו בונים סוכני AI שסוגרים פגישות עבורך 24/7. בלי משכורות, בלי הפסקות, ובלי תירוצים. משלמים רק על תוצאות.
+            </p>
+<div class="flex flex-col sm:flex-row-reverse gap-6 justify-center pt-8">
+<button class="cyber-gradient text-[#131313] text-xl font-bold px-10 py-5 rounded-xl hover:shadow-[0_0_30px_rgba(0,112,243,0.4)] transition-all transform hover:-translate-y-1" innerhtml="קבע פגישה כעת" onclick="toggleModal()">
+                    מלאו את היומן באוטומציה - קבעו פגישת הדגמה
+                </button>
+<button class="glass-card text-white text-xl font-bold px-10 py-5 rounded-xl hover:bg-white/10 transition-all border border-white/10" onclick="document.getElementById('solutions').scrollIntoView({behavior: 'smooth'})">
+                    איך זה עובד?
+                </button>
+</div>
+<div class="pt-12 flex flex-wrap justify-center gap-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+<div class="font-bold text-xl tracking-tighter">TRUSTED BY LEADERS</div>
+<div class="font-bold text-xl tracking-tighter">HYPER SCALE</div>
+<div class="font-bold text-xl tracking-tighter">DATA DRIVEN</div>
+</div>
+</div>
+</section>
+<!-- The Problem -->
+<section class="py-32 bg-[#1a1a1a] relative">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="space-y-8">
+<h2 class="text-4xl md:text-5xl font-black font-headline text-white">
+                        הפער המדמם: <span class="text-red-500">איפה הכסף שלך בורח?</span>
+</h2>
+<p class="text-xl text-white/60 leading-relaxed">
+                        רוב העסקים מאבדים 70% מהלידים שלהם כי הם פשוט לא חוזרים אליהם מספיק מהר. בעולם של היום, אם לא חזרת תוך 5 דקות - הליד עבר למתחרה.
+                    </p>
+<div class="space-y-6">
+<div class="flex items-center gap-4 p-6 rounded-2xl bg-white/5 border-r-4 border-red-500">
+<span class="material-symbols-outlined text-red-500 text-3xl" data-icon="timer_off">timer_off</span>
+<div>
+<h4 class="text-xl font-bold">5 דקות זה הגבול</h4>
+<p class="text-white/60">הסיכוי להמיר ליד יורד ב-400% לאחר 10 דקות של המתנה.</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-6 rounded-2xl bg-white/5 border-r-4 border-red-500">
+<span class="material-symbols-outlined text-red-500 text-3xl" data-icon="person_cancel">person_cancel</span>
+<div>
+<h4 class="text-xl font-bold">עייפות המכירות</h4>
+<p class="text-white/60">נציגים אנושיים מתעייפים, שוכחים לבצע Follow-up ומפספסים הזדמנויות.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="glass-card p-8 rounded-3xl border border-white/10 relative z-10 overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-[12rem]" data-icon="trending_down">trending_down</span>
+</div>
+<h3 class="text-2xl font-bold mb-6 text-white">סטטיסטיקת המענה הממוצעת</h3>
+<div class="space-y-8">
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-bold">
+<span class="">אנושי (ממוצע)</span>
+<span class="text-red-500">42 דקות</span>
+</div>
+<div class="h-4 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-red-500 w-[90%]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-bold">
+<span class="">AgentRun AI</span>
+<span class="text-blue-400">8 שניות</span>
+</div>
+<div class="h-4 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full cyber-gradient w-[5%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-center">
+<p class="text-blue-400 font-bold">הבדל של 315% באחוזי המרה</p>
+</div>
+</div>
+<div class="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/20 blur-[60px] rounded-full"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- The Solution -->
+<section class="py-32 bg-[#131313]" id="solutions">
+<div class="max-w-7xl mx-auto px-6">
+<div class="text-center mb-20 space-y-4">
+<h2 class="text-4xl md:text-6xl font-black font-headline">סוכני ה-AI שיעבדו בשבילך</h2>
+<p class="text-white/60 text-xl max-w-2xl mx-auto">מערכת מושלמת של 5 סוכנים אוטונומיים שמשתלטים על כל תהליך המכירה.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-6 gap-6">
+<!-- Agent 1 -->
+<div class="md:col-span-3 glass-card p-10 rounded-3xl flex flex-col justify-between group hover:border-blue-500/40 transition-all duration-500">
+<div>
+<div class="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-blue-500 text-4xl" data-icon="bolt">bolt</span>
+</div>
+<h3 class="text-3xl font-bold mb-4">מהירות ליד (Speed-to-Lead)</h3>
+<p class="text-white/60 text-lg">מענה מיידי לכל ליד חדש שמגיע, בכל שעה ביממה, בתוך פחות מ-10 שניות.</p>
+</div>
+<div class="mt-12 flex items-center gap-2 text-blue-500 font-bold cursor-pointer">
+<span>קרא עוד</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+</div>
+</div>
+<!-- Agent 2 -->
+<div class="md:col-span-3 glass-card p-10 rounded-3xl flex flex-col justify-between group hover:border-blue-300/40 transition-all duration-500">
+<div>
+<div class="w-16 h-16 rounded-2xl bg-blue-300/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-blue-300 text-4xl" data-icon="calendar_month">calendar_month</span>
+</div>
+<h3 class="text-3xl font-bold mb-4">קובע פגישות AI (Appointment Setter)</h3>
+<p class="text-white/60 text-lg">ניהול שיחות וואטסאפ מורכבות, טיפול בהתנגדויות וקביעת פגישות ישירות ליומן שלך.</p>
+</div>
+<div class="mt-12 flex items-center gap-2 text-blue-300 font-bold cursor-pointer">
+<span>קרא עוד</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+</div>
+</div>
+<!-- Agent 3 -->
+<div class="md:col-span-2 glass-card p-8 rounded-3xl group hover:border-blue-400/40 transition-all duration-500">
+<div class="w-12 h-12 rounded-xl bg-blue-400/10 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-blue-400 text-3xl" data-icon="history">history</span>
+</div>
+<h3 class="text-2xl font-bold mb-3">החייאת מאגר נתונים</h3>
+<p class="text-white/60">הפיכת לידים ישנים ו"מתים" לפגישות חמות ללא עלות פרסום נוספת.</p>
+</div>
+<!-- Agent 4 -->
+<div class="md:col-span-2 glass-card p-8 rounded-3xl group hover:border-white/20 transition-all duration-500">
+<div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-white text-3xl" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<h3 class="text-2xl font-bold mb-3">סדרות טיפוח (Nurture)</h3>
+<p class="text-white/60">בניית אמון עם הליד לאורך זמן באמצעות תוכן רלוונטי ואוטומטי עד שהוא מוכן לקנות.</p>
+</div>
+<!-- Agent 5 -->
+<div class="md:col-span-2 glass-card p-8 rounded-3xl group hover:border-blue-500/40 transition-all duration-500">
+<div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-blue-500 text-3xl" data-icon="analytics">analytics</span>
+</div>
+<h3 class="text-2xl font-bold mb-3">דיווח AI (Reporting)</h3>
+<p class="text-white/60">דוחות בזמן אמת על ביצועי הלידים, אחוזי המרה ותובנות עסקיות חכמות.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="py-32 bg-[#1a1a1a] relative overflow-hidden">
+<div class="max-w-4xl mx-auto px-6">
+<div class="text-center mb-20">
+<h2 class="text-4xl md:text-5xl font-black font-headline mb-4">איך זה עובד?</h2>
+<div class="inline-block px-4 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 font-bold font-hebrew text-sm">
+                    מענה תוך פחות מ-10 שניות
+                </div>
+</div>
+<div class="flex flex-col items-center gap-12">
+<div class="flex flex-col items-center text-center w-full max-w-md group">
+<div class="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 glow-accent group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[#0070F3] text-4xl">radar</span>
+</div>
+<h3 class="text-2xl font-bold mb-3 font-hebrew">זיהוי פנייה</h3>
+<p class="text-white/60 font-hebrew text-lg">המערכת מזהה ליד חדש או הזדמנות ב-CRM בתוך פחות משנייה.</p>
+</div>
+<div class="h-16 w-[2px] step-connector relative">
+<span class="material-symbols-outlined absolute -bottom-4 -right-[11px] text-[#0070F3] mirror">arrow_drop_down</span>
+</div>
+<div class="flex flex-col items-center text-center w-full max-w-md group">
+<div class="w-20 h-20 rounded-3xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(0,112,243,0.3)] group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[#0070F3] text-4xl">psychology</span>
+</div>
+<h3 class="text-2xl font-bold mb-3 font-hebrew">מענה חכם</h3>
+<p class="text-white/60 font-hebrew text-lg">סוכן ה-AI מנתח את הפנייה, עונה לשאלות וקובע תור בשיחה טבעית.</p>
+</div>
+<div class="h-16 w-[2px] step-connector relative">
+<span class="material-symbols-outlined absolute -bottom-4 -right-[11px] text-[#0070F3] mirror">arrow_drop_down</span>
+</div>
+<div class="flex flex-col items-center text-center w-full max-w-md group">
+<div class="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 glow-accent group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[#0070F3] text-4xl">event_available</span>
+</div>
+<h3 class="text-2xl font-bold mb-3 font-hebrew">יומן מלא</h3>
+<p class="text-white/60 font-hebrew text-lg">התור נסגר אוטומטית ביומן והמזכירה מקבלת עדכון מוכן לביצוע.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Risk Reversal Section -->
+<section class="py-32 relative overflow-hidden">
+<div class="absolute inset-0 bg-blue-500/5 opacity-50"></div>
+<div class="max-w-5xl mx-auto px-6 relative z-10">
+<div class="glass-card p-12 md:p-20 rounded-[3rem] border-2 border-blue-500/20 text-center space-y-8 shadow-[0_0_100px_rgba(0,112,243,0.1)]">
+<span class="material-symbols-outlined text-8xl text-blue-500 mb-4" style='font-variation-settings: "FILL" 1;'>verified_user</span>
+<h2 class="text-4xl md:text-6xl font-black font-headline">תוצאות מובטחות - או שלא תשלמו</h2>
+<p class="text-xl md:text-2xl text-white/70 leading-relaxed max-w-3xl mx-auto">
+                    אנחנו כל כך בטוחים במערכת שלנו, שאנחנו לוקחים את כל הסיכון עלינו. אם אנחנו לא מצליחים להביא לכם פגישות איכותיות - אתם לא משלמים שקל.
+                </p>
+<div class="pt-8">
+<button class="cyber-gradient text-[#131313] text-2xl font-black px-12 py-6 rounded-2xl hover:scale-105 transition-all shadow-2xl" onclick="toggleModal()">לחצו לפרטים</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Social Proof -->
+<section class="py-32 bg-[#1a1a1a]" id="testimonials">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex flex-col md:flex-row-reverse justify-between items-end gap-8 mb-16">
+<div class="text-right space-y-4">
+<h2 class="text-4xl md:text-5xl font-black font-headline">מה הלקוחות שלנו אומרים?</h2>
+<div class="flex flex-row-reverse items-center gap-4">
+<div class="flex text-yellow-500">
+<span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>star</span>
+<span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>star</span>
+<span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>star</span>
+<span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>star</span>
+<span class="material-symbols-outlined" style='font-variation-settings: "FILL" 1;'>star</span>
+</div>
+<span class="text-white/60 font-bold">4.9/5 מבוסס על 50+ עסקים</span>
+</div>
+</div>
+<div class="bg-white/5 p-6 rounded-2xl border-r-4 border-blue-400 flex flex-row-reverse items-center gap-6">
+<span class="material-symbols-outlined text-blue-400 text-4xl" data-icon="notification_important">notification_important</span>
+<div class="text-right">
+<p class="text-xl font-bold">מקומות מוגבלים לחודש הקרוב</p>
+<p class="text-white/60">נשארו 3 מקומות אחרונים להטמעה מיידית.</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Testimonial 1 -->
+<div class="glass-card p-8 rounded-2xl space-y-6">
+<p class="text-lg italic text-white/80">"הפסקתי לרדוף אחרי לידים. ה-AI עושה הכל ובערב אני פשוט בודק את היומן ורואה 4 פגישות חדשות למחר. שינה לי את העסק לחלוטין."</p>
+<div class="flex flex-row-reverse items-center gap-4">
+<img alt="יוסי כהן" class="w-12 h-12 object-cover rounded-full bg-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjTB9-1kQ94xl7Ut-l0UEsZtjRjR11PpPVaJDfAotawzMXbn1AYU1nrlc5hyueRJaWjJEXEALtAyoRYQXWRhMWLUQNFzmcJdCD-wdsMph149IZm8aXyDfxf2Hec0vK44lhMBm9-byO432hUlcvtzg4MwtiAPzD1lhTNO2HPmyzhCzZ7HEkWaNS7xcGANL9tfuRTiBbgLYQclGvRpqfR5f1vzb_aW8zIcKxH0zHMGp0nJsaxmo9T--z1eVBQPJXrVaF6tEggiWyDvTr"/>
+<div class="text-right">
+<p class="font-bold">יוסי כהן</p>
+<p class="text-sm text-white/40">מנכ"ל נדל"ן ישיר</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 2 -->
+<div class="glass-card p-8 rounded-2xl space-y-6">
+<p class="text-lg italic text-white/80">"לא האמנתי ש-AI יכול לטפל בהתנגדויות כל כך טוב. אחוזי הסגירה שלנו עלו ב-25% מאז שהטמענו את המערכת של AgentRun."</p>
+<div class="flex flex-row-reverse items-center gap-4">
+<img alt="מיכל לוי" class="w-12 h-12 object-cover rounded-full bg-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABWPFmwxZyus0VEhqcKUDzCMUPnte9rn7gcp5Lf5WHUzsVtey9sX1pIFNcFSZUNbD1mGkdsZ2J3ETxfGETvUcsoTYadvMvKYPAvAemk5pNDLxLVS1Q0Yt5uXNcGyti_B8UGtZZ1dd7lkbqMtpkKZ1kI9zzbEdVXNcSniNeeqDpcjlJq3iPd_xXn9eQKUYa09dP7ZqWi8Xr-rNQgZ3giHMFQtD5P5lTRdPZwQI6I71Wf_KnnXtnhpE9GjPW8P_0j0iCfOdQbS7ABcPm"/>
+<div class="text-right">
+<p class="font-bold">מיכל לוי</p>
+<p class="text-sm text-white/40">בעלים, קליניקת Bloom</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 3 -->
+<div class="glass-card p-8 rounded-2xl space-y-6">
+<p class="text-lg italic text-white/80">"החייאת המאגר לבדה החזירה את ההשקעה פי 10 תוך שבועיים. פשוט מטורף כמה כסף ישב לנו מתחת לאף בלי שידענו."</p>
+<div class="flex flex-row-reverse items-center gap-4">
+<img alt="דניאל אברהם" class="w-12 h-12 object-cover rounded-full bg-white/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbYpDEq5DB45DqaD3JY4HF0MhWADByffz8HGVbsqWOg0lg6B6ab1rdPIeqXV9fyi3FTRJXkadxuujLhAaGR149plD10oUU55fmXL2YtwT5aomIWv3xnqkCTN_vJKho7ti2S9WRirLT4q_b4JOI2CsJlrDGFoe4PmboWrDmXT1i9f7Nifqtim0ORbLi6ryjd7KykqUjUxOqiwzImNeRJ3GfVsCz_rQBdFgEAP0noKw9HOYlQnnprh6FoiXXR1de3UtGloI1LLNUNcpM"/>
+<div class="text-right">
+<p class="font-bold">דניאל אברהם</p>
+<p class="text-sm text-white/40">מנהל שיווק, TechSolve</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-24 bg-[#131313] text-center px-6" id="faq">
+<div class="max-w-3xl mx-auto space-y-12">
+<h2 class="text-4xl md:text-6xl font-black font-headline tracking-tighter">מוכנים לקנות בחזרה את הזמן שלכם?</h2>
+<p class="text-2xl text-white/60">בואו נראה איך AgentRun יכול להגדיל לכם את ההכנסות במינימום מאמץ.</p>
+<div class="flex flex-col gap-4 items-center">
+<button class="cyber-gradient text-[#131313] text-2xl font-black px-16 py-8 rounded-3xl hover:shadow-[0_0_50px_rgba(0,112,243,0.3)] transition-all" onclick="toggleModal()">
+                    ביקורת AI בחינם עכשיו
+                </button>
+<p class="text-white/40 flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400" data-icon="lock">lock</span>
+                    המידע שלכם מאובטח ולא ייחשף לצד ג'
+                </p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-white/5 bg-[#131313]">
+<div class="flex flex-col md:flex-row-reverse justify-between items-center px-8 py-12 w-full gap-6 max-w-7xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#0070F3]" data-icon="memory">memory</span>
+<span class="text-lg font-black text-white font-['Space_Grotesk']">AgentRun</span>
+</div>
+<div class="flex flex-row-reverse gap-8 font-['Inter'] text-sm text-right">
+<a class="text-gray-500 hover:text-blue-300 transition-colors" href="#">מדיניות פרטיות</a>
+<a class="text-gray-500 hover:text-blue-300 transition-colors" href="#">תנאי שימוש</a>
+<a class="text-gray-500 hover:text-blue-300 transition-colors" href="#">צור קשר</a>
+</div>
+<p class="text-sm text-gray-500 font-['Inter']">© 2024 AgentRun. כל הזכויות שמורות.</p>
+</div>
+</footer>
+<script>
+    function toggleModal() {
+        const modal = document.getElementById('leadModal');
+        const isHidden = modal.classList.contains('opacity-0');
+        
+        if (isHidden) {
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        } else {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+    }
+
+    document.getElementById('leadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+        
+        console.log('Submitting lead...', data);
+        
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerText;
+        submitBtn.innerText = 'שולח...';
+        submitBtn.disabled = true;
+
+        setTimeout(() => {
+            alert('הפנייה התקבלה! נציג (או סוכן AI) יחזור אליך בקרוב.');
+            toggleModal();
+            this.reset();
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+        }, 1000);
+    });
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('leadModal');
+        if (event.target == modal) {
+            toggleModal();
+        }
+    }
+</script>
+</body></html>
