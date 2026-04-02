@@ -108,7 +108,7 @@
 <a class="text-white/70 hover:text-[#0070F3] transition-all" href="#testimonials">הוכחות</a>
 <a class="text-white/70 hover:text-[#0070F3] transition-all" href="#faq">שאלות נפוצות</a>
 </div>
-<button class="bg-[#0070F3] text-white font-bold px-6 py-2 rounded-xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-blue-500/20 cyber-gradient" innerhtml="קבע פגישה כעת" onclick="toggleModal()">קבע פגישה כעת</button>
+<button class="bg-[#0070F3] text-white font-bold px-6 py-2 rounded-xl hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-blue-500/20 cyber-gradient" onclick="toggleModal()">קבע פגישה כעת</button>
 </nav>
 </header>
 <main class="mt-20">
@@ -433,28 +433,39 @@
         }
     }
 
-    document.getElementById('leadForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-        
-        console.log('Submitting lead...', data);
-        
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerText;
-        submitBtn.innerText = 'שולח...';
-        submitBtn.disabled = true;
+   document.getElementById('leadForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+   
+    const webhookURL = 'https://hook.eu1.make.com/p7yluuge58q3vb4pu9dg0i0cs1axaqxl'; 
 
-        setTimeout(() => {
-            alert('הפנייה התקבלה! נציג (או סוכן AI) יחזור אליך בקרוב.');
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerText;
+    submitBtn.innerText = 'שולח...';
+    submitBtn.disabled = true;
+
+    try {
+        const response = await fetch(webhookURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            alert('הפנייה התקבלה! סוכן ה-AI שלנו כבר בדרך אליך לוואטסאפ.');
             toggleModal();
             this.reset();
-            submitBtn.innerText = originalText;
-            submitBtn.disabled = false;
-        }, 1000);
-    });
-
+        } else {
+            throw new Error('שגיאה בשרת');
+        }
+    } catch (error) {
+        alert('אופס, הייתה תקלה בשליחה. נסו שוב או פנו אלינו ישירות.');
+    } finally {
+        submitBtn.innerText = originalText;
+        submitBtn.disabled = false;
+    }
+});
     window.onclick = function(event) {
         const modal = document.getElementById('leadModal');
         if (event.target == modal) {
